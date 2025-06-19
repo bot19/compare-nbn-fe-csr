@@ -15,7 +15,7 @@ import './css/index.css';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
+    <div className="bg-gray-50 text-gray-900 p-4">
       <AppView />
     </div>
   );
@@ -23,52 +23,44 @@ export default function App() {
 
 function AppView() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-screen-xl mx-auto">
       {/* Enhanced Hero Section for Desktop */}
       <Card className="overflow-hidden border-0 shadow-lg">
         <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-0">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-            <div className="md:col-span-8 p-8">
-              <h1 className="text-4xl font-bold mb-3 text-white">Compare NBN</h1>
-              <p className="text-xl text-white/80 mb-6">Some catchy description or whatever</p>
+          <div className="grid grid-cols-1 p-4 sm:p-6">
+            <h1 className="text-4xl font-bold mb-3 text-white">Compare NBN</h1>
+            <p className="text-xl text-white/80 mb-6">Some catchy description or whatever</p>
 
-              <div className="flex flex-wrap gap-6 text-white">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="desktop-glance"
-                    checked
-                    className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
-                  />
-                  <Label htmlFor="desktop-glance" className="text-white">
-                    at a glance
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="desktop-people"
-                    checked
-                    className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
-                  />
-                  <Label htmlFor="desktop-people" className="text-white">
-                    see why people
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="desktop-use"
-                    checked
-                    className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
-                  />
-                  <Label htmlFor="desktop-use" className="text-white">
-                    should use us
-                  </Label>
-                </div>
+            <div className="flex flex-wrap gap-6 text-white">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="desktop-glance"
+                  checked
+                  className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
+                />
+                <Label htmlFor="desktop-glance" className="text-white">
+                  at a glance
+                </Label>
               </div>
-            </div>
-
-            <div className="md:col-span-4 p-6 flex items-center justify-center">
-              <div className="w-full h-32 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center">
-                <span className="text-white/60 text-sm">Graphics placeholder</span>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="desktop-people"
+                  checked
+                  className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
+                />
+                <Label htmlFor="desktop-people" className="text-white">
+                  see why people
+                </Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="desktop-use"
+                  checked
+                  className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
+                />
+                <Label htmlFor="desktop-use" className="text-white">
+                  should use us
+                </Label>
               </div>
             </div>
           </div>
@@ -77,16 +69,16 @@ function AppView() {
 
       {/* Plans Count and Address Search */}
       <Card className="bg-white border border-gray-200 shadow-sm">
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+        <CardContent className="">
+          <div className="flex flex-col sm:flex-row justify-between md:items-center gap-4">
             <div>
               <h2 className="text-2xl font-semibold text-gray-900">300 NBN plans</h2>
               <p className="text-gray-500">Updated 12 June 2023</p>
             </div>
-            <div className="flex">
+            <div className="flex items-center">
               <Input
                 placeholder="Enter your address..."
-                className="rounded-r-none border-gray-300 bg-white min-w-[300px]"
+                className="rounded-r-none border-gray-300 bg-white xs:min-w-[240px] md:min-w-[360px]"
               />
               <Button className="rounded-l-none bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
                 <Search className="h-4 w-4" />
@@ -97,11 +89,11 @@ function AppView() {
       </Card>
 
       {/* Main content */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        <div className="md:col-span-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="lg:col-span-8 order-2 lg:order-1">
           <Card className="bg-white border border-gray-200 shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex flex-wrap gap-2 mb-6 items-center p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+            <CardContent className="">
+              <div className="flex flex-wrap gap-2 mb-4 items-center p-3 bg-white rounded-md border border-gray-200 shadow-sm">
                 <span className="text-sm text-gray-600">Sort:</span>
                 <Button variant="outline" size="sm" className="border-gray-300">
                   Price
@@ -116,19 +108,15 @@ function AppView() {
 
               <div className="space-y-4">
                 <DetailedPlanCard hasPromotion={true} promotionText="$10 off for 6 months" />
+
                 <DetailedPlanCard
                   provider="Aussie Broadband"
                   planName="Family Plan"
                   hasPromotion={true}
                   promotionText="Free modem + setup and $10 monthly discount for the first 6 months when you sign up online"
                 />
-                <DetailedPlanCard provider="TPG" planName="Basic Plan" speed="25/5" price="59" />
 
-                <div className="flex justify-center space-x-1 py-4">
-                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                  <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                </div>
+                <DetailedPlanCard provider="TPG" planName="Basic Plan" speed="25/5" price="59" />
 
                 <div className="flex justify-between items-center py-3 px-4 bg-white rounded-md border border-gray-200 shadow-sm">
                   <div className="flex items-center space-x-2">
@@ -147,7 +135,7 @@ function AppView() {
           </Card>
         </div>
 
-        <div className="md:col-span-4">
+        <div className="lg:col-span-4 order-1 lg:order-2">
           <FiltersPanel />
         </div>
       </div>
@@ -155,11 +143,9 @@ function AppView() {
       <Card className="bg-white border border-gray-200 shadow-sm">
         <CardContent className="py-4">
           <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
-            <span>© 2023 NBN Compare</span>
+            <span>© 2025 NBN Compare</span>
             <span>|</span>
             <span>Terms</span>
-            <span>|</span>
-            <span>Privacy</span>
           </div>
         </CardContent>
       </Card>
@@ -180,7 +166,7 @@ function DetailedPlanCard({
 
   return (
     <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-      <CardContent className="p-4">
+      <CardContent className="">
         {/* Top row: Logo, Plan name, Price CTA */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
@@ -236,6 +222,7 @@ function FiltersPanel() {
   ]);
   const [providerSearch, setProviderSearch] = useState('');
   const [hasPromotion, setHasPromotion] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const filteredProviders = providers.filter((provider) =>
     provider.name.toLowerCase().includes(providerSearch.toLowerCase())
@@ -243,482 +230,248 @@ function FiltersPanel() {
 
   return (
     <Card className="bg-white border border-gray-200 shadow-sm">
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <CardTitle className="text-lg text-gray-900">Filters</CardTitle>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="border-gray-300"
+        >
+          {isExpanded ? 'Close' : 'Open'}
+        </Button>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {/* Price Range Filter */}
-        <Collapsible className="w-full">
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-            <span className="text-gray-900">Price range</span>
-            <ChevronDown className="h-4 w-4 text-gray-500" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="price-50-75" className="border-gray-300" />
-                <Label htmlFor="price-50-75" className="text-gray-700">
-                  $50 - $75
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="price-75-100" className="border-gray-300" />
-                <Label htmlFor="price-75-100" className="text-gray-700">
-                  $75 - $100
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="price-100-125" className="border-gray-300" />
-                <Label htmlFor="price-100-125" className="text-gray-700">
-                  $100 - $125
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="price-125-150" className="border-gray-300" />
-                <Label htmlFor="price-125-150" className="text-gray-700">
-                  $125 - $150
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="price-150+" className="border-gray-300" />
-                <Label htmlFor="price-150+" className="text-gray-700">
-                  $150+
-                </Label>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
 
-        {/* Has Promotion Toggle */}
-        <div className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-          <span className="text-gray-900">Has promotion</span>
-          <Switch checked={hasPromotion} onCheckedChange={setHasPromotion} />
-        </div>
-
-        {/* Speed Down Filter */}
-        <Collapsible className="w-full">
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-            <span className="text-gray-900">Speed - down</span>
-            <ChevronDown className="h-4 w-4 text-gray-500" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="speed-25" className="border-gray-300" />
-                <Label htmlFor="speed-25" className="text-gray-700">
-                  25 Mbps
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="speed-50" className="border-gray-300" />
-                <Label htmlFor="speed-50" className="text-gray-700">
-                  50 Mbps
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="speed-100" className="border-gray-300" />
-                <Label htmlFor="speed-100" className="text-gray-700">
-                  100 Mbps
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="speed-250" className="border-gray-300" />
-                <Label htmlFor="speed-250" className="text-gray-700">
-                  250 Mbps
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="speed-1000" className="border-gray-300" />
-                <Label htmlFor="speed-1000" className="text-gray-700">
-                  1000 Mbps
-                </Label>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Speed Up Filter */}
-        <Collapsible className="w-full">
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-            <span className="text-gray-900">Speed - up</span>
-            <ChevronDown className="h-4 w-4 text-gray-500" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="up-5" className="border-gray-300" />
-                <Label htmlFor="up-5" className="text-gray-700">
-                  5 Mbps
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="up-20" className="border-gray-300" />
-                <Label htmlFor="up-20" className="text-gray-700">
-                  20 Mbps
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="up-40" className="border-gray-300" />
-                <Label htmlFor="up-40" className="text-gray-700">
-                  40 Mbps
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="up-100" className="border-gray-300" />
-                <Label htmlFor="up-100" className="text-gray-700">
-                  100 Mbps
-                </Label>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Fibre Type Filter */}
-        <Collapsible className="w-full">
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-            <span className="text-gray-900">Fibre type</span>
-            <ChevronDown className="h-4 w-4 text-gray-500" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="fttp" className="border-gray-300" />
-                <Label htmlFor="fttp" className="text-gray-700">
-                  FTTP
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="fttn" className="border-gray-300" />
-                <Label htmlFor="fttn" className="text-gray-700">
-                  FTTN
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="fttc" className="border-gray-300" />
-                <Label htmlFor="fttc" className="text-gray-700">
-                  FTTC
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="hfc" className="border-gray-300" />
-                <Label htmlFor="hfc" className="text-gray-700">
-                  HFC
-                </Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="fixed-wireless" className="border-gray-300" />
-                <Label htmlFor="fixed-wireless" className="text-gray-700">
-                  Fixed Wireless
-                </Label>
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-
-        {/* Providers Filter */}
-        <Collapsible className="w-full">
-          <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-            <span className="text-gray-900">Providers</span>
-            <ChevronDown className="h-4 w-4 text-gray-500" />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-            <div className="space-y-3">
-              <Input
-                placeholder="Search providers..."
-                value={providerSearch}
-                onChange={(e) => setProviderSearch(e.target.value)}
-                className="mb-2 border-gray-300"
-              />
-
-              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-                {filteredProviders.length > 0 ? (
-                  filteredProviders.map((provider) => (
-                    <div key={provider.id} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={provider.id}
-                        checked={provider.checked}
-                        className="border-gray-300"
-                        onCheckedChange={(checked) => {
-                          setProviders(
-                            providers.map((p) =>
-                              p.id === provider.id ? { ...p, checked: !!checked } : p
-                            )
-                          );
-                        }}
-                      />
-                      <Label htmlFor={provider.id} className="text-gray-700">
-                        {provider.name}
-                      </Label>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-500">No providers found</p>
-                )}
-              </div>
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
-      </CardContent>
-      <CardFooter>
-        <div className="flex justify-between w-full">
-          <Button variant="outline" size="sm" className="border-gray-300">
-            Clear all
-          </Button>
-          <Button
-            size="sm"
-            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-          >
-            Apply filters
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
-  );
-}
-
-function MobileFiltersPanel() {
-  const [providers, setProviders] = useState([
-    { id: 'm-telstra', name: 'Telstra', checked: false },
-    { id: 'm-optus', name: 'Optus', checked: false },
-    { id: 'm-tpg', name: 'TPG', checked: false },
-    { id: 'm-aussie', name: 'Aussie Broadband', checked: false },
-    { id: 'm-myrepublic', name: 'MyRepublic', checked: false },
-    { id: 'm-superloop', name: 'Superloop', checked: false },
-    { id: 'm-exetel', name: 'Exetel', checked: false },
-    { id: 'm-dodo', name: 'Dodo', checked: false },
-  ]);
-  const [providerSearch, setProviderSearch] = useState('');
-  const [hasPromotion, setHasPromotion] = useState(false);
-
-  const filteredProviders = providers.filter((provider) =>
-    provider.name.toLowerCase().includes(providerSearch.toLowerCase())
-  );
-
-  return (
-    <div className="space-y-4">
-      {/* Price Range Filter */}
-      <Collapsible className="w-full">
-        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-          <span className="text-gray-900">Price range</span>
-          <ChevronDown className="h-4 w-4 text-gray-500" />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-price-50-75" className="border-gray-300" />
-              <Label htmlFor="m-price-50-75" className="text-gray-700">
-                $50 - $75
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-price-75-100" className="border-gray-300" />
-              <Label htmlFor="m-price-75-100" className="text-gray-700">
-                $75 - $100
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-price-100-125" className="border-gray-300" />
-              <Label htmlFor="m-price-100-125" className="text-gray-700">
-                $100 - $125
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-price-125-150" className="border-gray-300" />
-              <Label htmlFor="m-price-125-150" className="text-gray-700">
-                $125 - $150
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-price-150+" className="border-gray-300" />
-              <Label htmlFor="m-price-150+" className="text-gray-700">
-                $150+
-              </Label>
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Has Promotion Toggle */}
-      <div className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-        <span className="text-gray-900">Has promotion</span>
-        <Switch checked={hasPromotion} onCheckedChange={setHasPromotion} />
-      </div>
-
-      {/* Speed Down Filter */}
-      <Collapsible className="w-full">
-        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-          <span className="text-gray-900">Speed - down</span>
-          <ChevronDown className="h-4 w-4 text-gray-500" />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-speed-25" className="border-gray-300" />
-              <Label htmlFor="m-speed-25" className="text-gray-700">
-                25 Mbps
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-speed-50" className="border-gray-300" />
-              <Label htmlFor="m-speed-50" className="text-gray-700">
-                50 Mbps
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-speed-100" className="border-gray-300" />
-              <Label htmlFor="m-speed-100" className="text-gray-700">
-                100 Mbps
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-speed-250" className="border-gray-300" />
-              <Label htmlFor="m-speed-250" className="text-gray-700">
-                250 Mbps
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-speed-1000" className="border-gray-300" />
-              <Label htmlFor="m-speed-1000" className="text-gray-700">
-                1000 Mbps
-              </Label>
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Speed Up Filter */}
-      <Collapsible className="w-full">
-        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-          <span className="text-gray-900">Speed - up</span>
-          <ChevronDown className="h-4 w-4 text-gray-500" />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-up-5" className="border-gray-300" />
-              <Label htmlFor="m-up-5" className="text-gray-700">
-                5 Mbps
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-up-20" className="border-gray-300" />
-              <Label htmlFor="m-up-20" className="text-gray-700">
-                20 Mbps
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-up-40" className="border-gray-300" />
-              <Label htmlFor="m-up-40" className="text-gray-700">
-                40 Mbps
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-up-100" className="border-gray-300" />
-              <Label htmlFor="m-up-100" className="text-gray-700">
-                100 Mbps
-              </Label>
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Fibre Type Filter */}
-      <Collapsible className="w-full">
-        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-          <span className="text-gray-900">Fibre type</span>
-          <ChevronDown className="h-4 w-4 text-gray-500" />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-fttp" className="border-gray-300" />
-              <Label htmlFor="m-fttp" className="text-gray-700">
-                FTTP
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-fttn" className="border-gray-300" />
-              <Label htmlFor="m-fttn" className="text-gray-700">
-                FTTN
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-fttc" className="border-gray-300" />
-              <Label htmlFor="m-fttc" className="text-gray-700">
-                FTTC
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-hfc" className="border-gray-300" />
-              <Label htmlFor="m-hfc" className="text-gray-700">
-                HFC
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="m-fixed-wireless" className="border-gray-300" />
-              <Label htmlFor="m-fixed-wireless" className="text-gray-700">
-                Fixed Wireless
-              </Label>
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
-
-      {/* Providers Filter */}
-      <Collapsible className="w-full">
-        <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
-          <span className="text-gray-900">Providers</span>
-          <ChevronDown className="h-4 w-4 text-gray-500" />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-          <div className="space-y-3">
-            <Input
-              placeholder="Search providers..."
-              value={providerSearch}
-              onChange={(e) => setProviderSearch(e.target.value)}
-              className="mb-2 border-gray-300"
-            />
-
-            <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
-              {filteredProviders.length > 0 ? (
-                filteredProviders.map((provider) => (
-                  <div key={provider.id} className="flex items-center space-x-2">
-                    <Checkbox
-                      id={provider.id}
-                      checked={provider.checked}
-                      className="border-gray-300"
-                      onCheckedChange={(checked) => {
-                        setProviders(
-                          providers.map((p) =>
-                            p.id === provider.id ? { ...p, checked: !!checked } : p
-                          )
-                        );
-                      }}
-                    />
-                    <Label htmlFor={provider.id} className="text-gray-700">
-                      {provider.name}
+      {isExpanded && (
+        <>
+          <CardContent className="space-y-4 py-0 sm:py-0">
+            {/* Price Range Filter */}
+            <Collapsible className="w-full">
+              <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
+                <span className="text-gray-900">Price range</span>
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="price-50-75" className="border-gray-300" />
+                    <Label htmlFor="price-50-75" className="text-gray-700">
+                      $50 - $75
                     </Label>
                   </div>
-                ))
-              ) : (
-                <p className="text-sm text-gray-500">No providers found</p>
-              )}
-            </div>
-          </div>
-        </CollapsibleContent>
-      </Collapsible>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="price-75-100" className="border-gray-300" />
+                    <Label htmlFor="price-75-100" className="text-gray-700">
+                      $75 - $100
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="price-100-125" className="border-gray-300" />
+                    <Label htmlFor="price-100-125" className="text-gray-700">
+                      $100 - $125
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="price-125-150" className="border-gray-300" />
+                    <Label htmlFor="price-125-150" className="text-gray-700">
+                      $125 - $150
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="price-150+" className="border-gray-300" />
+                    <Label htmlFor="price-150+" className="text-gray-700">
+                      $150+
+                    </Label>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
 
-      <div className="flex justify-between w-full pt-2">
-        <Button variant="outline" size="sm" className="border-gray-300">
-          Clear all
-        </Button>
-        <Button
-          size="sm"
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-        >
-          Apply filters
-        </Button>
-      </div>
-    </div>
+            {/* Has Promotion Toggle */}
+            <div className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+              <span className="text-gray-900">Has promotion</span>
+              <Switch checked={hasPromotion} onCheckedChange={setHasPromotion} />
+            </div>
+
+            {/* Speed Down Filter */}
+            <Collapsible className="w-full">
+              <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
+                <span className="text-gray-900">Speed - down</span>
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="speed-25" className="border-gray-300" />
+                    <Label htmlFor="speed-25" className="text-gray-700">
+                      25 Mbps
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="speed-50" className="border-gray-300" />
+                    <Label htmlFor="speed-50" className="text-gray-700">
+                      50 Mbps
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="speed-100" className="border-gray-300" />
+                    <Label htmlFor="speed-100" className="text-gray-700">
+                      100 Mbps
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="speed-250" className="border-gray-300" />
+                    <Label htmlFor="speed-250" className="text-gray-700">
+                      250 Mbps
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="speed-1000" className="border-gray-300" />
+                    <Label htmlFor="speed-1000" className="text-gray-700">
+                      1000 Mbps
+                    </Label>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Speed Up Filter */}
+            <Collapsible className="w-full">
+              <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
+                <span className="text-gray-900">Speed - up</span>
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="up-5" className="border-gray-300" />
+                    <Label htmlFor="up-5" className="text-gray-700">
+                      5 Mbps
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="up-20" className="border-gray-300" />
+                    <Label htmlFor="up-20" className="text-gray-700">
+                      20 Mbps
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="up-40" className="border-gray-300" />
+                    <Label htmlFor="up-40" className="text-gray-700">
+                      40 Mbps
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="up-100" className="border-gray-300" />
+                    <Label htmlFor="up-100" className="text-gray-700">
+                      100 Mbps
+                    </Label>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Fibre Type Filter */}
+            <Collapsible className="w-full">
+              <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
+                <span className="text-gray-900">Fibre type</span>
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="fttp" className="border-gray-300" />
+                    <Label htmlFor="fttp" className="text-gray-700">
+                      FTTP
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="fttn" className="border-gray-300" />
+                    <Label htmlFor="fttn" className="text-gray-700">
+                      FTTN
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="fttc" className="border-gray-300" />
+                    <Label htmlFor="fttc" className="text-gray-700">
+                      FTTC
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="hfc" className="border-gray-300" />
+                    <Label htmlFor="hfc" className="text-gray-700">
+                      HFC
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="fixed-wireless" className="border-gray-300" />
+                    <Label htmlFor="fixed-wireless" className="text-gray-700">
+                      Fixed Wireless
+                    </Label>
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {/* Providers Filter */}
+            <Collapsible className="w-full">
+              <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
+                <span className="text-gray-900">Providers</span>
+                <ChevronDown className="h-4 w-4 text-gray-500" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+                <div className="space-y-3">
+                  <Input
+                    placeholder="Search providers..."
+                    value={providerSearch}
+                    onChange={(e) => setProviderSearch(e.target.value)}
+                    className="mb-2 border-gray-300"
+                  />
+
+                  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                    {filteredProviders.length > 0 ? (
+                      filteredProviders.map((provider) => (
+                        <div key={provider.id} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={provider.id}
+                            checked={provider.checked}
+                            className="border-gray-300"
+                            onCheckedChange={(checked) => {
+                              setProviders(
+                                providers.map((p) =>
+                                  p.id === provider.id ? { ...p, checked: !!checked } : p
+                                )
+                              );
+                            }}
+                          />
+                          <Label htmlFor={provider.id} className="text-gray-700">
+                            {provider.name}
+                          </Label>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-gray-500">No providers found</p>
+                    )}
+                  </div>
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+          </CardContent>
+          <CardFooter>
+            <div className="flex justify-between w-full">
+              <Button variant="outline" size="sm" className="border-gray-300">
+                Clear all
+              </Button>
+              <Button
+                size="sm"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+              >
+                Apply filters
+              </Button>
+            </div>
+          </CardFooter>
+        </>
+      )}
+    </Card>
   );
 }

@@ -26,6 +26,12 @@
   --black: #000000;
 
   --radius: 0.5rem;
+
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
 }
 
 @layer base {
@@ -37,6 +43,10 @@
     color: theme(gray.900);
     background: theme(gray.50);
     font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  button {
+    cursor: pointer;
   }
 }
 
