@@ -2,6 +2,17 @@
 
 Compare NBN Front-end using mock data and Client-Side Rendering pattern
 
+## To dos
+
+1. create data types
+1. mock data, 20-30 plans, consume
+1. abstract into components
+1. implement state
+1. UI - polish plan cards
+1. UI - improve hero header
+1. UI - make address bar bigger + state for set address/clear
+1. UI - ? improve/simplify footer (less repetition)
+
 ## Tech Stack
 
 - Vite
