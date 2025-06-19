@@ -4,7 +4,6 @@ import { Search, ChevronRight, ChevronLeft, ChevronDown, Info, ExternalLink } fr
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -14,173 +13,15 @@ import './css/index.css';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
 
-export default function NBNComparison() {
+export default function App() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
-      <Tabs defaultValue="desktop" className="w-full">
-        <div className="container mx-auto py-6">
-          <TabsList className="mb-8 bg-white border border-gray-200">
-            <TabsTrigger value="mobile" className="text-lg">
-              Mobile
-            </TabsTrigger>
-            <TabsTrigger value="desktop" className="text-lg">
-              Desktop
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="mobile">
-            <MobileView />
-          </TabsContent>
-
-          <TabsContent value="desktop">
-            <DesktopView />
-          </TabsContent>
-        </div>
-      </Tabs>
+      <AppView />
     </div>
   );
 }
 
-function MobileView() {
-  return (
-    <div className="flex flex-col gap-6 max-w-sm mx-auto">
-      {/* Enhanced Hero Section for Mobile */}
-      <Card className="overflow-hidden border-0 shadow-lg">
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
-          <h1 className="text-2xl font-bold mb-2 text-center">Compare NBN</h1>
-          <p className="text-center opacity-90 mb-6">Some catchy description or whatever</p>
-
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="mobile-glance"
-                checked
-                className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
-              />
-              <Label htmlFor="mobile-glance" className="text-white">
-                at a glance
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="mobile-people"
-                checked
-                className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
-              />
-              <Label htmlFor="mobile-people" className="text-white">
-                see why people
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="mobile-use"
-                checked
-                className="border-white data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
-              />
-              <Label htmlFor="mobile-use" className="text-white">
-                should use us
-              </Label>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      {/* Plans Count and Address Search */}
-      <Card className="bg-white border border-gray-200 shadow-sm">
-        <CardContent className="p-4">
-          <div className="flex flex-col gap-4">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">300 NBN plans</h2>
-                <p className="text-sm text-gray-500">Updated 12 June 2023</p>
-              </div>
-            </div>
-            <div className="flex">
-              <Input
-                placeholder="Enter your address..."
-                className="rounded-r-none border-gray-300 bg-white"
-              />
-              <Button className="rounded-l-none bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-                <Search className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="bg-white border border-gray-200 shadow-sm">
-        <CardContent className="space-y-4 p-4">
-          <div className="flex flex-wrap gap-2 mb-6 items-center p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-            <span className="text-sm text-gray-600">Sort:</span>
-            <Button variant="outline" size="sm" className="border-gray-300">
-              Price
-            </Button>
-            <Button variant="outline" size="sm" className="border-gray-300">
-              Speed ↑
-            </Button>
-            <Button variant="outline" size="sm" className="border-gray-300">
-              Speed ↓
-            </Button>
-          </div>
-
-          <div className="space-y-3">
-            <DetailedPlanCard hasPromotion={true} promotionText="$10 off for 6 months" />
-            <DetailedPlanCard
-              provider="Aussie Broadband"
-              planName="Family Plan"
-              hasPromotion={true}
-              promotionText="Free modem + setup and $10 monthly discount for the first 6 months when you sign up online"
-            />
-            <DetailedPlanCard provider="TPG" planName="Basic Plan" speed="25/5" price="59" />
-
-            <div className="flex justify-center space-x-1 py-2">
-              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-              <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-            </div>
-
-            <div className="flex justify-between items-center py-3 px-4 bg-white rounded-md border border-gray-200 shadow-sm">
-              <div className="flex items-center space-x-2">
-                <Button variant="ghost" size="icon" className="h-6 w-6">
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <span className="text-sm">Page 1 of 10</span>
-                <Button variant="ghost" size="icon" className="h-6 w-6">
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-              <span className="text-sm text-gray-500">300 plans</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Mobile Filters */}
-      <Card className="bg-white border border-gray-200 shadow-sm">
-        <CardHeader>
-          <CardTitle className="text-lg">Filters</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <MobileFiltersPanel />
-        </CardContent>
-      </Card>
-
-      <Card className="bg-white border border-gray-200 shadow-sm">
-        <CardContent className="py-4">
-          <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
-            <span>© 2023 NBN Compare</span>
-            <span>|</span>
-            <span>Terms</span>
-            <span>|</span>
-            <span>Privacy</span>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-}
-
-function DesktopView() {
+function AppView() {
   return (
     <div className="space-y-6">
       {/* Enhanced Hero Section for Desktop */}
