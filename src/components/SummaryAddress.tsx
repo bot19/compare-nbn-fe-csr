@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { lookupAddress, type AddressData } from '@/lib/addressService';
+import { lookupAddress } from '@/lib/addressService';
 import type { NBNType } from '@/types/nbn';
 
 interface SummaryAddressProps {
