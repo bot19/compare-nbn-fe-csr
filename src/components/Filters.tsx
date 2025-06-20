@@ -19,6 +19,7 @@ import {
   type FilterAction,
 } from '@/types/nbn';
 import type { PlansFilters } from '@/lib/filterService';
+import { isMobile } from '@/lib/utils';
 
 interface FiltersProps {
   filters: PlansFilters;
@@ -27,7 +28,7 @@ interface FiltersProps {
 
 export function Filters({ filters, dispatchFilters }: FiltersProps) {
   const [providerSearch, setProviderSearch] = useState('');
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(isMobile() ? false : true);
 
   // Create providers list with defaults first, then the rest
   const allProvidersList = [

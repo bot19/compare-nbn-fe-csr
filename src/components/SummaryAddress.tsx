@@ -82,46 +82,44 @@ export function SummaryAddress({ setAddrNbnType, totalPlans, dataDate }: Summary
             <p className="text-gray-500">Updated {formatDate(dataDate)}</p>
           </div>
 
-          <div className="flex items-center gap-2">
-            {addressFound && currentAddress && currentNbnType ? (
-              <div className="flex items-center gap-2">
-                <Badge
-                  variant="outline"
-                  className="text-xs border-green-300 text-green-700 bg-green-50"
-                >
-                  ✓ {currentAddress}
-                </Badge>
-                <Badge variant="outline" className="text-xs border-blue-300 text-blue-700">
-                  {currentNbnType}
-                </Badge>
-                <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 w-8 p-0">
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            ) : (
-              <div className="flex items-center">
-                <Input
-                  placeholder="Enter your address..."
-                  value={addrInput}
-                  onChange={(e) => setAddrInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  className="rounded-r-none border-gray-300 bg-white xs:min-w-[240px] md:min-w-[360px]"
-                  disabled={loading}
-                />
-                <Button
-                  className="rounded-l-none bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                  onClick={handleSearch}
-                  disabled={loading || !addrInput.trim()}
-                >
-                  {loading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Search className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-            )}
-          </div>
+          {addressFound && currentAddress && currentNbnType ? (
+            <div className="flex items-center gap-2">
+              <Badge
+                variant="outline"
+                className="text-xs border-green-300 text-green-700 bg-green-50"
+              >
+                ✓ {currentAddress}
+              </Badge>
+              <Badge variant="outline" className="text-xs border-blue-300 text-blue-700">
+                {currentNbnType}
+              </Badge>
+              <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 w-8 p-0">
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <Input
+                placeholder="Enter your address..."
+                value={addrInput}
+                onChange={(e) => setAddrInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="rounded-r-none border-gray-300 bg-white xs:min-w-[240px] md:min-w-[360px]"
+                disabled={loading}
+              />
+              <Button
+                className="rounded-l-none bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                onClick={handleSearch}
+                disabled={loading || !addrInput.trim()}
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Search className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

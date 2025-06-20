@@ -1,15 +1,11 @@
-import { Card, CardContent } from '@/components/ui/card';
+import { APP_SETTINGS } from '@/lib/settings';
+
+const FOOTER_TEXT = '© 2025 NBN Compare';
 
 export function Footer() {
   return (
-    <Card className="bg-white border border-gray-200 shadow-sm">
-      <CardContent className="py-4">
-        <div className="flex justify-center items-center space-x-4 text-sm text-gray-500">
-          <span>© 2025 NBN Compare</span>
-          <span>|</span>
-          <span>Terms</span>
-        </div>
-      </CardContent>
-    </Card>
+    <footer className="text-center text-sm text-gray-500 p-2 sm:p-4">
+      {FOOTER_TEXT} ({APP_SETTINGS.VERSION})
+    </footer>
   );
 }
