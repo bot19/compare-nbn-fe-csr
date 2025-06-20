@@ -51,7 +51,7 @@ export function Page() {
   }
 
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto">
+    <div className="space-y-2 sm:space-y-6">
       <SummaryAddress
         setAddrNbnType={setAddrNbnType}
         totalPlans={dataFilAddr.length} // (4) # NBN plans = dataFilAddr.length()

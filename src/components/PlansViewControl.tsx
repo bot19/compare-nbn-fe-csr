@@ -62,7 +62,7 @@ export function PlansViewControl({ dataFilAddr }: PlansViewControlProps) {
   }, [dataFilAddr, filters, sort]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-6">
       <div className="lg:col-span-8 order-2 lg:order-1">
         <Card className="bg-white border border-gray-200 shadow-sm">
           <CardContent className="">
