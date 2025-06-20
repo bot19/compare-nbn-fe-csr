@@ -14,6 +14,7 @@ A React-based web application for comparing NBN (National Broadband Network) pla
 
 ## DONE
 
+1. ✅ fix: UI plan card - link out works
 1. ✅ fix: UI pagination + helpful numbers
 1. ✅ fix: UI address, filters default state based on breakpoint
 1. ✅ UI update footer

@@ -60,6 +60,7 @@ export function PlansList({ dataPlans }: PlansListProps) {
           hasPromotion={!!plan.promotion}
           promotionText={plan.promotion || ''}
           type={plan.type}
+          url={plan.url}
         />
       ))}
 
@@ -105,6 +106,7 @@ function DetailedPlanCard({
   hasPromotion = false,
   promotionText = '',
   type = 'FTTP',
+  url = '',
 }) {
   const providerInitial = provider.charAt(0);
 
@@ -121,10 +123,15 @@ function DetailedPlanCard({
               <h3 className="font-semibold text-gray-900">{planName}</h3>
             </div>
           </div>
-          <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white flex items-center gap-2">
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors"
+          >
             ${price}/mo
             <ExternalLink className="h-4 w-4" />
-          </Button>
+          </a>
         </div>
 
         {/* Middle row: Promotion Info Box (spans only logo + plan name width) */}
