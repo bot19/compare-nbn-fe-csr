@@ -7,7 +7,6 @@ A React-based web application for comparing NBN (National Broadband Network) pla
 1. add unit tests
 1. UI nice hero header
 1. UI nice address search + set
-1. UI update footer
 1. UI fix pagination min mobile
 1. UI nice plan cards
 1. resolve filters auto expand mobile > desktop
@@ -16,6 +15,7 @@ A React-based web application for comparing NBN (National Broadband Network) pla
 
 ## DONE
 
+1. ✅ UI update footer
 1. ✅ fix remove borked URL state
 1. ✅ create data types
 1. ✅ mock data, 20-30 plans, consume
