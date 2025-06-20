@@ -15,13 +15,7 @@ import {
   DEFAULT_UPLOAD_SPEEDS,
   DEFAULT_NBN_TYPES,
   DEFAULT_PRICE_RANGES,
-  type Provider,
-  type DownloadSpeed,
-  type UploadSpeed,
   type NBNType,
-  type PriceRange,
-  type SpeedRange,
-  type PriceRangeObject,
   type FilterAction,
 } from '@/types/nbn';
 import type { PlansFilters } from '@/lib/filterService';

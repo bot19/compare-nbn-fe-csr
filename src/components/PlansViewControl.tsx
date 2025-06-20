@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useReducer } from 'react';
+import { useState, useMemo, useReducer } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Sort } from './Sort';
 import { Filters } from './Filters';
