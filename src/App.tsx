@@ -1,6 +1,14 @@
 'use client';
-import { useState } from 'react';
-import { Search, ChevronRight, ChevronLeft, ChevronDown, Info, ExternalLink } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  Search,
+  ChevronRight,
+  ChevronLeft,
+  ChevronDown,
+  Info,
+  ExternalLink,
+  Loader2,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -22,7 +30,15 @@ import {
   type UploadSpeed,
   type NBNType,
   type PriceRange,
+  type NBNPlan,
 } from '@/types/nbn';
+import { APP_SETTINGS } from '@/lib/settings';
+import {
+  fetchNBNPlans,
+  type PlansResponse,
+  type PlansFilters,
+  type PlansSort,
+} from '@/lib/nbnService';
 import './css/index.css';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
@@ -36,6 +52,49 @@ export default function App() {
 }
 
 function AppView() {
+  // State for plans data
+  const [plansData, setPlansData] = useState<PlansResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [currentSort, setCurrentSort] = useState<PlansSort>({ field: 'price', direction: 'asc' });
+  const [currentFilters, setCurrentFilters] = useState<PlansFilters>({});
+
+  // Load plans data
+  useEffect(() => {
+    const loadPlans = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchNBNPlans(
+          currentPage,
+          APP_SETTINGS.ITEMS_PER_PAGE,
+          currentFilters,
+          currentSort
+        );
+        setPlansData(data);
+      } catch (error) {
+        console.error('Error loading plans:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPlans();
+  }, [currentPage, currentSort, currentFilters]);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  const handleSortChange = (field: PlansSort['field'], direction: PlansSort['direction']) => {
+    setCurrentSort({ field, direction });
+    setCurrentPage(1); // Reset to first page when sorting
+  };
+
+  const handleFiltersChange = useCallback((newFilters: PlansFilters) => {
+    setCurrentFilters(newFilters);
+    setCurrentPage(1); // Reset to first page when filtering
+  }, []);
+
   return (
     <div className="space-y-6 max-w-screen-xl mx-auto">
       {/* Enhanced Hero Section for Desktop */}
@@ -86,7 +145,9 @@ function AppView() {
         <CardContent className="">
           <div className="flex flex-col sm:flex-row justify-between md:items-center gap-4">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900">300 NBN plans</h2>
+              <h2 className="text-2xl font-semibold text-gray-900">
+                {loading ? 'Loading...' : `${plansData?.total || 0} NBN plans`}
+              </h2>
               <p className="text-gray-500">Updated 12 June 2023</p>
             </div>
             <div className="flex items-center">
@@ -109,48 +170,105 @@ function AppView() {
             <CardContent className="">
               <div className="flex flex-wrap gap-2 mb-4 items-center p-3 bg-white rounded-md border border-gray-200 shadow-sm">
                 <span className="text-sm text-gray-600">Sort:</span>
-                <Button variant="outline" size="sm" className="border-gray-300">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border-gray-300 ${
+                    currentSort.field === 'price' && currentSort.direction === 'asc'
+                      ? 'bg-blue-50 border-blue-300'
+                      : ''
+                  }`}
+                  onClick={() => handleSortChange('price', 'asc')}
+                >
                   Price
                 </Button>
-                <Button variant="outline" size="sm" className="border-gray-300">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border-gray-300 ${
+                    currentSort.field === 'downloadSpeed' && currentSort.direction === 'asc'
+                      ? 'bg-blue-50 border-blue-300'
+                      : ''
+                  }`}
+                  onClick={() => handleSortChange('downloadSpeed', 'asc')}
+                >
                   Speed ↑
                 </Button>
-                <Button variant="outline" size="sm" className="border-gray-300">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className={`border-gray-300 ${
+                    currentSort.field === 'downloadSpeed' && currentSort.direction === 'desc'
+                      ? 'bg-blue-50 border-blue-300'
+                      : ''
+                  }`}
+                  onClick={() => handleSortChange('downloadSpeed', 'desc')}
+                >
                   Speed ↓
                 </Button>
               </div>
 
               <div className="space-y-4">
-                <DetailedPlanCard hasPromotion={true} promotionText="$10 off for 6 months" />
-
-                <DetailedPlanCard
-                  provider="Aussie Broadband"
-                  planName="Family Plan"
-                  hasPromotion={true}
-                  promotionText="Free modem + setup and $10 monthly discount for the first 6 months when you sign up online"
-                />
-
-                <DetailedPlanCard provider="TPG" planName="Basic Plan" speed="25/5" price="59" />
-
-                <div className="flex justify-between items-center py-3 px-4 bg-white rounded-md border border-gray-200 shadow-sm">
-                  <div className="flex items-center space-x-2">
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <span className="text-sm">Page 1 of 10</span>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
+                {loading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                    <span className="ml-2 text-gray-600">Loading plans...</span>
                   </div>
-                  <span className="text-sm text-gray-500">300 plans</span>
-                </div>
+                ) : plansData?.plans && plansData.plans.length > 0 ? (
+                  <>
+                    {plansData.plans.map((plan) => (
+                      <DetailedPlanCard
+                        key={plan.id}
+                        provider={plan.provider}
+                        planName={plan.planName}
+                        speed={`${plan.downloadSpeed}/${plan.uploadSpeed}`}
+                        price={plan.price.toString()}
+                        hasPromotion={!!plan.promotion}
+                        promotionText={plan.promotion || ''}
+                        type={plan.type}
+                      />
+                    ))}
+
+                    {/* Pagination */}
+                    <div className="flex justify-between items-center py-3 px-4 bg-white rounded-md border border-gray-200 shadow-sm">
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={!plansData.hasPrevPage}
+                          onClick={() => handlePageChange(currentPage - 1)}
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <span className="text-sm">
+                          Page {plansData.page} of {plansData.totalPages}
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={!plansData.hasNextPage}
+                          onClick={() => handlePageChange(currentPage + 1)}
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                      <span className="text-sm text-gray-500">{plansData.total} plans</span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-12">
+                    <p className="text-gray-500">No plans found matching your criteria.</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
         </div>
 
         <div className="lg:col-span-4 order-1 lg:order-2">
-          <FiltersPanel />
+          <FiltersPanel onFiltersChange={handleFiltersChange} />
         </div>
       </div>
 
@@ -223,7 +341,11 @@ function DetailedPlanCard({
   );
 }
 
-function FiltersPanel() {
+function FiltersPanel({
+  onFiltersChange,
+}: {
+  onFiltersChange: (newFilters: PlansFilters) => void;
+}) {
   // Create providers list with defaults first, then the rest
   const allProvidersList = [
     ...DEFAULT_PROVIDERS.map((provider) => ({
@@ -260,6 +382,32 @@ function FiltersPanel() {
   // Separate default and other providers for display
   const defaultProviders = filteredProviders.filter((provider) => provider.isDefault);
   const otherProviders = filteredProviders.filter((provider) => !provider.isDefault);
+
+  const handleClearAll = () => {
+    setProviders(providers.map((p) => ({ ...p, checked: false })));
+    setHasPromotion(false);
+    setSelectedPriceRange('');
+    setSelectedDownloadSpeed('');
+    setSelectedUploadSpeed('');
+    setSelectedNBNType('');
+  };
+
+  const handleApplyFilters = () => {
+    const selectedProviders = providers
+      .filter((provider) => provider.checked)
+      .map((provider) => provider.name);
+
+    const newFilters: PlansFilters = {
+      providers: selectedProviders.length > 0 ? selectedProviders : undefined,
+      priceRange: selectedPriceRange || undefined,
+      downloadSpeed: selectedDownloadSpeed || undefined,
+      uploadSpeed: selectedUploadSpeed || undefined,
+      nbnType: selectedNBNType || undefined,
+      hasPromotion: hasPromotion || undefined,
+    };
+
+    onFiltersChange(newFilters);
+  };
 
   return (
     <Card className="bg-white border border-gray-200 shadow-sm">
@@ -493,12 +641,18 @@ function FiltersPanel() {
           </CardContent>
           <CardFooter>
             <div className="flex justify-between w-full">
-              <Button variant="outline" size="sm" className="border-gray-300">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-gray-300"
+                onClick={handleClearAll}
+              >
                 Clear all
               </Button>
               <Button
                 size="sm"
                 className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                onClick={handleApplyFilters}
               >
                 Apply filters
               </Button>

@@ -1,102 +1,83 @@
-# compare-nbn-fe-csr
+# NBN Plan Comparison Tool
 
-Compare NBN Front-end using mock data and Client-Side Rendering pattern
+A React-based web application for comparing NBN (National Broadband Network) plans from various Australian internet service providers.
 
-## To dos
+## Features
 
-1. create data types
-1. mock data, 20-30 plans, consume
-1. abstract into components
-1. implement state
-1. UI - polish plan cards
-1. UI - improve hero header
-1. UI - make address bar bigger + state for set address/clear
-1. UI - ? improve/simplify footer (less repetition)
+- **Async Data Loading**: Plans are loaded asynchronously with a 400ms delay to simulate real API calls
+- **Pagination**: Display 8 plans per page with navigation controls
+- **Filtering**: Filter plans by provider, price range, speed, NBN type, and promotions
+- **Sorting**: Sort plans by price or download speed (ascending/descending)
+- **Responsive Design**: Works on desktop and mobile devices
+- **Modern UI**: Built with Tailwind CSS and shadcn/ui components
 
-## Tech Stack
+## Technical Stack
 
-- Vite
-- TypeScript
-- React
-- ESLint
-- Prettier
+- **Frontend**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui
+- **Icons**: Lucide React
 
-## Getting Started
+## Project Structure
 
-1. Install dependencies:
-
-```bash
-npm install
+```
+src/
+├── components/ui/          # Reusable UI components
+├── data/                   # Static data files
+│   └── nbnPlans.ts        # NBN plans data
+├── lib/                    # Utility libraries
+│   ├── settings.ts        # App configuration
+│   ├── nbnService.ts      # Data fetching service
+│   └── utils.ts           # General utilities
+├── types/                  # TypeScript type definitions
+│   └── nbn.ts             # NBN-related types
+└── App.tsx                # Main application component
 ```
 
-2. Start the development server:
+## Configuration
 
-```bash
-npm run dev
-```
+The app settings are defined in `src/lib/settings.ts`:
 
-3. Build for production:
-
-```bash
-npm run build
-```
+- `ITEMS_PER_PAGE`: Number of plans displayed per page (default: 8)
+- `DATA_LOADING_DELAY_MS`: Simulated API delay in milliseconds (default: 400)
 
 ## Development
 
-- The project uses ESLint and Prettier for code formatting and linting
-- TypeScript is set up for type safety
+1. Install dependencies:
 
-# React + TypeScript + Vite
+   ```bash
+   npm install
+   ```
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+2. Start the development server:
 
-Currently, two official plugins are available:
+   ```bash
+   npm run dev
+   ```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+3. Open your browser to `http://localhost:5173`
 
-## Expanding the ESLint configuration
+## Data Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Each NBN plan includes:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
+- Provider name
+- Plan name and pricing
+- Download/upload speeds
+- NBN connection type (FTTP, FTTN, etc.)
+- Optional promotional offers
+- Provider website URL
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Filtering and Sorting
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+- **Providers**: Multi-select from popular and all available providers
+- **Price Range**: Radio button selection for price brackets
+- **Speed**: Filter by minimum download/upload speeds
+- **NBN Type**: Filter by connection type
+- **Promotions**: Toggle to show only plans with promotional offers
+- **Sorting**: Sort by price or download speed in ascending/descending order
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
-```
+## License
+
+This project is for educational purposes.
