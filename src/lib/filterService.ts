@@ -1,10 +1,10 @@
-import type { NBNPlan } from '@/types/nbn';
+import type { NBNPlan, SpeedRange, PriceRangeObject } from '@/types/nbn';
 
 export interface PlansFilters {
   providers?: string[];
-  priceRange?: string;
-  downloadSpeed?: string;
-  uploadSpeed?: string;
+  priceRange?: PriceRangeObject;
+  downloadSpeed?: SpeedRange;
+  uploadSpeed?: SpeedRange;
   nbnType?: string;
   hasPromotion?: boolean;
 }
@@ -24,28 +24,23 @@ export function filterPlans(
   }
 
   if (filters.priceRange) {
-    // Parse price range (e.g., "$50-$80" -> min: 50, max: 80)
-    const priceMatch = filters.priceRange.match(/\$(\d+)-?\$?(\d+)?/);
-    if (priceMatch) {
-      const minPrice = parseInt(priceMatch[1]);
-      const maxPrice = priceMatch[2] ? parseInt(priceMatch[2]) : Infinity;
-      filteredPlans = filteredPlans.filter(plan => 
-        plan.price >= minPrice && plan.price <= maxPrice
-      );
-    }
+    const [minPrice, maxPrice] = filters.priceRange.range;
+    filteredPlans = filteredPlans.filter(plan => 
+      plan.price >= minPrice && plan.price <= maxPrice
+    );
   }
 
   if (filters.downloadSpeed) {
-    const speed = parseInt(filters.downloadSpeed);
+    const [minSpeed, maxSpeed] = filters.downloadSpeed.range;
     filteredPlans = filteredPlans.filter(plan => 
-      parseInt(plan.downloadSpeed) >= speed
+      parseInt(plan.downloadSpeed) >= minSpeed && parseInt(plan.downloadSpeed) <= maxSpeed
     );
   }
 
   if (filters.uploadSpeed) {
-    const speed = parseInt(filters.uploadSpeed);
+    const [minSpeed, maxSpeed] = filters.uploadSpeed.range;
     filteredPlans = filteredPlans.filter(plan => 
-      parseInt(plan.uploadSpeed) >= speed
+      parseInt(plan.uploadSpeed) >= minSpeed && parseInt(plan.uploadSpeed) <= maxSpeed
     );
   }
 

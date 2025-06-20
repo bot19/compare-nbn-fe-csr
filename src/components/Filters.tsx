@@ -20,6 +20,8 @@ import {
   type UploadSpeed,
   type NBNType,
   type PriceRange,
+  type SpeedRange,
+  type PriceRangeObject,
   type FilterAction,
 } from '@/types/nbn';
 import type { PlansFilters } from '@/lib/filterService';
@@ -73,18 +75,18 @@ export function Filters({ filters, dispatchFilters }: FiltersProps) {
   };
 
   const handlePriceRangeChange = (value: string) => {
-    const priceRange = value || undefined;
-    dispatchFilters({ type: 'SET_PRICE_RANGE', payload: priceRange as PriceRange | undefined });
+    const priceRange = DEFAULT_PRICE_RANGES.find((pr) => pr.key === value);
+    dispatchFilters({ type: 'SET_PRICE_RANGE', payload: priceRange });
   };
 
   const handleDownloadSpeedChange = (value: string) => {
-    const speed = value || undefined;
-    dispatchFilters({ type: 'SET_DOWNLOAD_SPEED', payload: speed as DownloadSpeed | undefined });
+    const speedRange = DEFAULT_DOWNLOAD_SPEEDS.find((sr) => sr.key === value);
+    dispatchFilters({ type: 'SET_DOWNLOAD_SPEED', payload: speedRange });
   };
 
   const handleUploadSpeedChange = (value: string) => {
-    const speed = value || undefined;
-    dispatchFilters({ type: 'SET_UPLOAD_SPEED', payload: speed as UploadSpeed | undefined });
+    const speedRange = DEFAULT_UPLOAD_SPEEDS.find((sr) => sr.key === value);
+    dispatchFilters({ type: 'SET_UPLOAD_SPEED', payload: speedRange });
   };
 
   const handleNBNTypeChange = (value: string) => {
@@ -129,17 +131,20 @@ export function Filters({ filters, dispatchFilters }: FiltersProps) {
                 <ChevronDown className="h-4 w-4 text-gray-500" />
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-                <RadioGroup value={filters.priceRange || ''} onValueChange={handlePriceRangeChange}>
+                <RadioGroup
+                  value={filters.priceRange?.key || ''}
+                  onValueChange={handlePriceRangeChange}
+                >
                   <div className="space-y-2">
                     {DEFAULT_PRICE_RANGES.map((priceRange) => (
-                      <div key={priceRange} className="flex items-center space-x-2">
+                      <div key={priceRange.key} className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={priceRange}
-                          id={`price-${priceRange}`}
+                          value={priceRange.key}
+                          id={`price-${priceRange.key}`}
                           className="border-gray-300"
                         />
-                        <Label htmlFor={`price-${priceRange}`} className="text-gray-700">
-                          {priceRange}
+                        <Label htmlFor={`price-${priceRange.key}`} className="text-gray-700">
+                          {priceRange.key}
                         </Label>
                       </div>
                     ))}
@@ -156,19 +161,19 @@ export function Filters({ filters, dispatchFilters }: FiltersProps) {
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
                 <RadioGroup
-                  value={filters.downloadSpeed || ''}
+                  value={filters.downloadSpeed?.key || ''}
                   onValueChange={handleDownloadSpeedChange}
                 >
                   <div className="space-y-2">
-                    {DEFAULT_DOWNLOAD_SPEEDS.map((speed) => (
-                      <div key={speed} className="flex items-center space-x-2">
+                    {DEFAULT_DOWNLOAD_SPEEDS.map((speedRange) => (
+                      <div key={speedRange.key} className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={speed}
-                          id={`speed-${speed}`}
+                          value={speedRange.key}
+                          id={`speed-${speedRange.key}`}
                           className="border-gray-300"
                         />
-                        <Label htmlFor={`speed-${speed}`} className="text-gray-700">
-                          {speed} Mbps
+                        <Label htmlFor={`speed-${speedRange.key}`} className="text-gray-700">
+                          {speedRange.key} Mbps
                         </Label>
                       </div>
                     ))}
@@ -185,19 +190,19 @@ export function Filters({ filters, dispatchFilters }: FiltersProps) {
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
                 <RadioGroup
-                  value={filters.uploadSpeed || ''}
+                  value={filters.uploadSpeed?.key || ''}
                   onValueChange={handleUploadSpeedChange}
                 >
                   <div className="space-y-2">
-                    {DEFAULT_UPLOAD_SPEEDS.map((speed) => (
-                      <div key={speed} className="flex items-center space-x-2">
+                    {DEFAULT_UPLOAD_SPEEDS.map((speedRange) => (
+                      <div key={speedRange.key} className="flex items-center space-x-2">
                         <RadioGroupItem
-                          value={speed}
-                          id={`up-${speed}`}
+                          value={speedRange.key}
+                          id={`up-${speedRange.key}`}
                           className="border-gray-300"
                         />
-                        <Label htmlFor={`up-${speed}`} className="text-gray-700">
-                          {speed} Mbps
+                        <Label htmlFor={`up-${speedRange.key}`} className="text-gray-700">
+                          {speedRange.key} Mbps
                         </Label>
                       </div>
                     ))}
@@ -315,6 +320,7 @@ export function Filters({ filters, dispatchFilters }: FiltersProps) {
               </CollapsibleContent>
             </Collapsible>
           </CardContent>
+
           <CardFooter>
             <Button
               variant="outline"

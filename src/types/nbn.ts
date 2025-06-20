@@ -71,12 +71,23 @@ export type SortOption =
   | 'upload_speed_asc'
   | 'upload_speed_desc';
 
+// Range objects for filtering
+export interface SpeedRange {
+  key: string;
+  range: [number, number];
+}
+
+export interface PriceRangeObject {
+  key: PriceRange;
+  range: [number, number];
+}
+
 // Filter options to match the Filters component
 export interface FilterOptions {
   providers: Provider[];
-  priceRanges: PriceRange[];
-  downloadSpeeds: DownloadSpeed[];
-  uploadSpeeds: UploadSpeed[];
+  priceRanges: PriceRangeObject[];
+  downloadSpeeds: SpeedRange[];
+  uploadSpeeds: SpeedRange[];
   nbnTypes: NBNType[];
   hasPromotion: boolean; // check promotion?.length > 0
 }
@@ -130,17 +141,40 @@ export const ALL_PROVIDERS: Provider[] = [
   'Flip'
 ];
 
-export const DEFAULT_DOWNLOAD_SPEEDS: DownloadSpeed[] = ['25', '50', '100', '250', '500', '1000'];
-export const DEFAULT_UPLOAD_SPEEDS: UploadSpeed[] = ['5', '10', '25','50', '100'];
+export const DEFAULT_DOWNLOAD_SPEEDS: SpeedRange[] = [
+  { key: '0 - 25', range: [0, 25] },
+  { key: '25 - 50', range: [25, 50] },
+  { key: '50 - 100', range: [50, 100] },
+  { key: '100 - 250', range: [100, 250] },
+  { key: '250 - 500', range: [250, 500] },
+  { key: '500 - 1000', range: [500, 1000] }
+];
+
+export const DEFAULT_UPLOAD_SPEEDS: SpeedRange[] = [
+  { key: '0 - 5', range: [0, 5] },
+  { key: '5 - 10', range: [5, 10] },
+  { key: '10 - 25', range: [10, 25] },
+  { key: '25 - 50', range: [25, 50] },
+  { key: '50 - 100', range: [50, 100] }
+];
+
 export const DEFAULT_NBN_TYPES: NBNType[] = ['FTTP', 'FTTN', 'FTTC', 'FTTB', 'HFC', 'Fixed Wireless', 'Satellite'];
-export const DEFAULT_PRICE_RANGES: PriceRange[] = ['Under $50', '$50 - $75', '$75 - $100', '$100 - $125', '$125 - $150', '$150+'];
+
+export const DEFAULT_PRICE_RANGES: PriceRangeObject[] = [
+  { key: 'Under $50', range: [0, 50] },
+  { key: '$50 - $75', range: [50, 75] },
+  { key: '$75 - $100', range: [75, 100] },
+  { key: '$100 - $125', range: [100, 125] },
+  { key: '$125 - $150', range: [125, 150] },
+  { key: '$150+', range: [150, 9999] }
+];
 
 // Filter action types for useReducer
 export type FilterAction = 
   | { type: 'SET_PROVIDERS'; payload: string[] }
-  | { type: 'SET_PRICE_RANGE'; payload: PriceRange | undefined }
-  | { type: 'SET_DOWNLOAD_SPEED'; payload: DownloadSpeed | undefined }
-  | { type: 'SET_UPLOAD_SPEED'; payload: UploadSpeed | undefined }
+  | { type: 'SET_PRICE_RANGE'; payload: PriceRangeObject | undefined }
+  | { type: 'SET_DOWNLOAD_SPEED'; payload: SpeedRange | undefined }
+  | { type: 'SET_UPLOAD_SPEED'; payload: SpeedRange | undefined }
   | { type: 'SET_NBN_TYPE'; payload: NBNType | undefined }
   | { type: 'SET_HAS_PROMOTION'; payload: boolean | undefined }
   | { type: 'CLEAR_ALL' }; 

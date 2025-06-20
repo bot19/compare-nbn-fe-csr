@@ -1,5 +1,6 @@
 import type { PlansFilters } from './filterService';
 import type { PlansSort } from './sortService';
+import { DEFAULT_PRICE_RANGES, DEFAULT_DOWNLOAD_SPEEDS, DEFAULT_UPLOAD_SPEEDS } from '@/types/nbn';
 
 export interface URLState {
   address?: string;
@@ -28,9 +29,9 @@ export function stateToURL(state: URLState): URLSearchParams {
     if (state.filters.providers && state.filters.providers.length > 0) {
       params.set('providers', state.filters.providers.join(','));
     }
-    if (state.filters.priceRange) params.set('priceRange', state.filters.priceRange);
-    if (state.filters.downloadSpeed) params.set('downloadSpeed', state.filters.downloadSpeed);
-    if (state.filters.uploadSpeed) params.set('uploadSpeed', state.filters.uploadSpeed);
+    if (state.filters.priceRange) params.set('priceRange', state.filters.priceRange.key);
+    if (state.filters.downloadSpeed) params.set('downloadSpeed', state.filters.downloadSpeed.key);
+    if (state.filters.uploadSpeed) params.set('uploadSpeed', state.filters.uploadSpeed.key);
     if (state.filters.nbnType) params.set('nbnType', state.filters.nbnType);
     if (state.filters.hasPromotion) params.set('hasPromotion', 'true');
   }
@@ -64,9 +65,18 @@ export function urlToState(): URLState {
   if (params.has('providers')) {
     filters.providers = params.get('providers')!.split(',');
   }
-  if (params.has('priceRange')) filters.priceRange = params.get('priceRange')!;
-  if (params.has('downloadSpeed')) filters.downloadSpeed = params.get('downloadSpeed')!;
-  if (params.has('uploadSpeed')) filters.uploadSpeed = params.get('uploadSpeed')!;
+  if (params.has('priceRange')) {
+    const priceRangeKey = params.get('priceRange')!;
+    filters.priceRange = DEFAULT_PRICE_RANGES.find(pr => pr.key === priceRangeKey);
+  }
+  if (params.has('downloadSpeed')) {
+    const downloadSpeedKey = params.get('downloadSpeed')!;
+    filters.downloadSpeed = DEFAULT_DOWNLOAD_SPEEDS.find(ds => ds.key === downloadSpeedKey);
+  }
+  if (params.has('uploadSpeed')) {
+    const uploadSpeedKey = params.get('uploadSpeed')!;
+    filters.uploadSpeed = DEFAULT_UPLOAD_SPEEDS.find(us => us.key === uploadSpeedKey);
+  }
   if (params.has('nbnType')) filters.nbnType = params.get('nbnType')!;
   if (params.has('hasPromotion')) filters.hasPromotion = true;
 
