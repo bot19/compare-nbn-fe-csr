@@ -108,6 +108,28 @@ export const DEFAULT_PROVIDERS: Provider[] = [
   'Dodo'
 ];
 
+export const ALL_PROVIDERS: Provider[] = [
+  'Telstra',
+  'Optus',
+  'TPG',
+  'Aussie Broadband',
+  'MyRepublic',
+  'Superloop',
+  'Exetel',
+  'Dodo',
+  'Belong',
+  'Vodafone',
+  'iiNet',
+  'Internode',
+  'Southern Phone',
+  'Mate',
+  'More Telecom',
+  'Spintel',
+  'Future Broadband',
+  'Launtel',
+  'Flip'
+];
+
 export const DEFAULT_DOWNLOAD_SPEEDS: DownloadSpeed[] = ['25', '50', '100', '250', '500', '1000'];
 export const DEFAULT_UPLOAD_SPEEDS: UploadSpeed[] = ['5', '10', '25','50', '100'];
 export const DEFAULT_NBN_TYPES: NBNType[] = ['FTTP', 'FTTN', 'FTTC', 'FTTB', 'HFC', 'Fixed Wireless', 'Satellite'];

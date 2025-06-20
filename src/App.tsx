@@ -9,6 +9,20 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Switch } from '@/components/ui/switch';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio';
+import {
+  DEFAULT_PROVIDERS,
+  ALL_PROVIDERS,
+  DEFAULT_DOWNLOAD_SPEEDS,
+  DEFAULT_UPLOAD_SPEEDS,
+  DEFAULT_NBN_TYPES,
+  DEFAULT_PRICE_RANGES,
+  type Provider,
+  type DownloadSpeed,
+  type UploadSpeed,
+  type NBNType,
+  type PriceRange,
+} from '@/types/nbn';
 import './css/index.css';
 // import reactLogo from './assets/react.svg'
 // import viteLogo from '/vite.svg'
@@ -210,23 +224,42 @@ function DetailedPlanCard({
 }
 
 function FiltersPanel() {
-  const [providers, setProviders] = useState([
-    { id: 'telstra', name: 'Telstra', checked: false },
-    { id: 'optus', name: 'Optus', checked: false },
-    { id: 'tpg', name: 'TPG', checked: false },
-    { id: 'aussie', name: 'Aussie Broadband', checked: false },
-    { id: 'myrepublic', name: 'MyRepublic', checked: false },
-    { id: 'superloop', name: 'Superloop', checked: false },
-    { id: 'exetel', name: 'Exetel', checked: false },
-    { id: 'dodo', name: 'Dodo', checked: false },
-  ]);
+  // Create providers list with defaults first, then the rest
+  const allProvidersList = [
+    ...DEFAULT_PROVIDERS.map((provider) => ({
+      id: provider.toLowerCase().replace(/\s+/g, '-'),
+      name: provider,
+      checked: false,
+      isDefault: true,
+    })),
+    ...ALL_PROVIDERS.filter((provider) => !DEFAULT_PROVIDERS.includes(provider)).map(
+      (provider) => ({
+        id: provider.toLowerCase().replace(/\s+/g, '-'),
+        name: provider,
+        checked: false,
+        isDefault: false,
+      })
+    ),
+  ];
+
+  const [providers, setProviders] = useState(allProvidersList);
   const [providerSearch, setProviderSearch] = useState('');
   const [hasPromotion, setHasPromotion] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
 
+  // Radio button states
+  const [selectedPriceRange, setSelectedPriceRange] = useState<PriceRange | ''>('');
+  const [selectedDownloadSpeed, setSelectedDownloadSpeed] = useState<DownloadSpeed | ''>('');
+  const [selectedUploadSpeed, setSelectedUploadSpeed] = useState<UploadSpeed | ''>('');
+  const [selectedNBNType, setSelectedNBNType] = useState<NBNType | ''>('');
+
   const filteredProviders = providers.filter((provider) =>
     provider.name.toLowerCase().includes(providerSearch.toLowerCase())
   );
+
+  // Separate default and other providers for display
+  const defaultProviders = filteredProviders.filter((provider) => provider.isDefault);
+  const otherProviders = filteredProviders.filter((provider) => !provider.isDefault);
 
   return (
     <Card className="bg-white border border-gray-200 shadow-sm">
@@ -245,175 +278,129 @@ function FiltersPanel() {
       {isExpanded && (
         <>
           <CardContent className="space-y-4 py-0 sm:py-0">
-            {/* Price Range Filter */}
+            {/* Has Promotion Toggle - Moved to top */}
+            <div className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow-sm">
+              <span className="text-gray-900">Has promotion</span>
+              <Switch checked={hasPromotion} onCheckedChange={setHasPromotion} />
+            </div>
+
+            {/* Price Range Filter - Changed to radio */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Price range</span>
                 <ChevronDown className="h-4 w-4 text-gray-500" />
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="price-50-75" className="border-gray-300" />
-                    <Label htmlFor="price-50-75" className="text-gray-700">
-                      $50 - $75
-                    </Label>
+                <RadioGroup
+                  value={selectedPriceRange}
+                  onValueChange={(value) => setSelectedPriceRange(value as PriceRange)}
+                >
+                  <div className="space-y-2">
+                    {DEFAULT_PRICE_RANGES.map((priceRange) => (
+                      <div key={priceRange} className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value={priceRange}
+                          id={`price-${priceRange}`}
+                          className="border-gray-300"
+                        />
+                        <Label htmlFor={`price-${priceRange}`} className="text-gray-700">
+                          {priceRange}
+                        </Label>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="price-75-100" className="border-gray-300" />
-                    <Label htmlFor="price-75-100" className="text-gray-700">
-                      $75 - $100
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="price-100-125" className="border-gray-300" />
-                    <Label htmlFor="price-100-125" className="text-gray-700">
-                      $100 - $125
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="price-125-150" className="border-gray-300" />
-                    <Label htmlFor="price-125-150" className="text-gray-700">
-                      $125 - $150
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="price-150+" className="border-gray-300" />
-                    <Label htmlFor="price-150+" className="text-gray-700">
-                      $150+
-                    </Label>
-                  </div>
-                </div>
+                </RadioGroup>
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Has Promotion Toggle */}
-            <div className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-              <span className="text-gray-900">Has promotion</span>
-              <Switch checked={hasPromotion} onCheckedChange={setHasPromotion} />
-            </div>
-
-            {/* Speed Down Filter */}
+            {/* Speed Down Filter - Changed to radio */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Speed - down</span>
                 <ChevronDown className="h-4 w-4 text-gray-500" />
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="speed-25" className="border-gray-300" />
-                    <Label htmlFor="speed-25" className="text-gray-700">
-                      25 Mbps
-                    </Label>
+                <RadioGroup
+                  value={selectedDownloadSpeed}
+                  onValueChange={(value) => setSelectedDownloadSpeed(value as DownloadSpeed)}
+                >
+                  <div className="space-y-2">
+                    {DEFAULT_DOWNLOAD_SPEEDS.map((speed) => (
+                      <div key={speed} className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value={speed}
+                          id={`speed-${speed}`}
+                          className="border-gray-300"
+                        />
+                        <Label htmlFor={`speed-${speed}`} className="text-gray-700">
+                          {speed} Mbps
+                        </Label>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="speed-50" className="border-gray-300" />
-                    <Label htmlFor="speed-50" className="text-gray-700">
-                      50 Mbps
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="speed-100" className="border-gray-300" />
-                    <Label htmlFor="speed-100" className="text-gray-700">
-                      100 Mbps
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="speed-250" className="border-gray-300" />
-                    <Label htmlFor="speed-250" className="text-gray-700">
-                      250 Mbps
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="speed-1000" className="border-gray-300" />
-                    <Label htmlFor="speed-1000" className="text-gray-700">
-                      1000 Mbps
-                    </Label>
-                  </div>
-                </div>
+                </RadioGroup>
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Speed Up Filter */}
+            {/* Speed Up Filter - Changed to radio */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Speed - up</span>
                 <ChevronDown className="h-4 w-4 text-gray-500" />
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="up-5" className="border-gray-300" />
-                    <Label htmlFor="up-5" className="text-gray-700">
-                      5 Mbps
-                    </Label>
+                <RadioGroup
+                  value={selectedUploadSpeed}
+                  onValueChange={(value) => setSelectedUploadSpeed(value as UploadSpeed)}
+                >
+                  <div className="space-y-2">
+                    {DEFAULT_UPLOAD_SPEEDS.map((speed) => (
+                      <div key={speed} className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value={speed}
+                          id={`up-${speed}`}
+                          className="border-gray-300"
+                        />
+                        <Label htmlFor={`up-${speed}`} className="text-gray-700">
+                          {speed} Mbps
+                        </Label>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="up-20" className="border-gray-300" />
-                    <Label htmlFor="up-20" className="text-gray-700">
-                      20 Mbps
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="up-40" className="border-gray-300" />
-                    <Label htmlFor="up-40" className="text-gray-700">
-                      40 Mbps
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="up-100" className="border-gray-300" />
-                    <Label htmlFor="up-100" className="text-gray-700">
-                      100 Mbps
-                    </Label>
-                  </div>
-                </div>
+                </RadioGroup>
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Fibre Type Filter */}
+            {/* Fibre Type Filter - Changed to radio */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Fibre type</span>
                 <ChevronDown className="h-4 w-4 text-gray-500" />
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="fttp" className="border-gray-300" />
-                    <Label htmlFor="fttp" className="text-gray-700">
-                      FTTP
-                    </Label>
+                <RadioGroup
+                  value={selectedNBNType}
+                  onValueChange={(value) => setSelectedNBNType(value as NBNType)}
+                >
+                  <div className="space-y-2">
+                    {DEFAULT_NBN_TYPES.map((type) => (
+                      <div key={type} className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          value={type}
+                          id={`type-${type}`}
+                          className="border-gray-300"
+                        />
+                        <Label htmlFor={`type-${type}`} className="text-gray-700">
+                          {type}
+                        </Label>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="fttn" className="border-gray-300" />
-                    <Label htmlFor="fttn" className="text-gray-700">
-                      FTTN
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="fttc" className="border-gray-300" />
-                    <Label htmlFor="fttc" className="text-gray-700">
-                      FTTC
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="hfc" className="border-gray-300" />
-                    <Label htmlFor="hfc" className="text-gray-700">
-                      HFC
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="fixed-wireless" className="border-gray-300" />
-                    <Label htmlFor="fixed-wireless" className="text-gray-700">
-                      Fixed Wireless
-                    </Label>
-                  </div>
-                </div>
+                </RadioGroup>
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Providers Filter */}
+            {/* Providers Filter - Keep as checkboxes for multiple selection */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Providers</span>
@@ -428,27 +415,74 @@ function FiltersPanel() {
                     className="mb-2 border-gray-300"
                   />
 
-                  <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                  <div className="space-y-2 h-64 overflow-y-auto pr-1">
                     {filteredProviders.length > 0 ? (
-                      filteredProviders.map((provider) => (
-                        <div key={provider.id} className="flex items-center space-x-2">
-                          <Checkbox
-                            id={provider.id}
-                            checked={provider.checked}
-                            className="border-gray-300"
-                            onCheckedChange={(checked) => {
-                              setProviders(
-                                providers.map((p) =>
-                                  p.id === provider.id ? { ...p, checked: !!checked } : p
-                                )
-                              );
-                            }}
-                          />
-                          <Label htmlFor={provider.id} className="text-gray-700">
-                            {provider.name}
-                          </Label>
-                        </div>
-                      ))
+                      <div className="space-y-3">
+                        {/* Default/Popular Providers */}
+                        {defaultProviders.length > 0 && (
+                          <div>
+                            <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                              Popular Providers
+                            </div>
+                            <div className="space-y-2">
+                              {defaultProviders.map((provider) => (
+                                <div key={provider.id} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={provider.id}
+                                    checked={provider.checked}
+                                    className="border-gray-300"
+                                    onCheckedChange={(checked) => {
+                                      setProviders(
+                                        providers.map((p) =>
+                                          p.id === provider.id ? { ...p, checked: !!checked } : p
+                                        )
+                                      );
+                                    }}
+                                  />
+                                  <Label htmlFor={provider.id} className="text-gray-700">
+                                    {provider.name}
+                                  </Label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Visual Separator */}
+                        {defaultProviders.length > 0 && otherProviders.length > 0 && (
+                          <div className="border-t border-gray-200 my-3"></div>
+                        )}
+
+                        {/* Other Providers */}
+                        {otherProviders.length > 0 && (
+                          <div>
+                            <div className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                              All Providers
+                            </div>
+                            <div className="space-y-2">
+                              {otherProviders.map((provider) => (
+                                <div key={provider.id} className="flex items-center space-x-2">
+                                  <Checkbox
+                                    id={provider.id}
+                                    checked={provider.checked}
+                                    className="border-gray-300"
+                                    onCheckedChange={(checked) => {
+                                      setProviders(
+                                        providers.map((p) =>
+                                          p.id === provider.id ? { ...p, checked: !!checked } : p
+                                        )
+                                      );
+                                    }}
+                                  />
+                                  <Label htmlFor={provider.id} className="text-gray-700">
+                                    {provider.name}
+                                  </Label>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     ) : (
                       <p className="text-sm text-gray-500">No providers found</p>
                     )}
