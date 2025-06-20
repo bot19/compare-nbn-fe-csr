@@ -2,6 +2,26 @@
 
 A React-based web application for comparing NBN (National Broadband Network) plans from various Australian internet service providers.
 
+## TODOs
+
+1. fix remove borked URL state
+1. add unit tests
+1. UI nice hero header
+1. UI nice address search + set
+1. UI update footer
+1. UI fix pagination min mobile
+1. UI nice plan cards
+1. resolve filters auto expand mobile > desktop
+1. save state to URL: addrNbnType, sort, filters
+1. UI nice skeleton loading, lower CLS
+
+## DONE
+
+1. ✅ create data types
+1. ✅ mock data, 20-30 plans, consume
+1. ✅ abstract into components
+1. ✅ implement state
+
 ## Features
 
 - **Async Data Loading**: Plans are loaded asynchronously with a 400ms delay to simulate real API calls
