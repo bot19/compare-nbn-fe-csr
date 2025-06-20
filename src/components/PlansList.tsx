@@ -33,6 +33,8 @@ export function PlansList({ dataPlans }: PlansListProps) {
   const totalPages = Math.ceil(dataPlans.length / pageLimit);
   const hasNextPage = currentPage < totalPages;
   const hasPrevPage = currentPage > 1;
+  const startIndex = (currentPage - 1) * pageLimit + 1;
+  const endIndex = startIndex + dataPlansPage.length - 1;
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -74,7 +76,8 @@ export function PlansList({ dataPlans }: PlansListProps) {
             <ChevronLeft className="h-4 w-4" />
           </Button>
           <span className="text-sm">
-            Page {currentPage} of {totalPages}
+            Page <span className="font-bold">{currentPage}</span>{' '}
+            <span className="text-gray-300">/</span> {totalPages}
           </span>
           <Button
             variant="ghost"
@@ -87,7 +90,7 @@ export function PlansList({ dataPlans }: PlansListProps) {
           </Button>
         </div>
         <span className="text-sm text-gray-500">
-          {dataPlansPage.length} of {dataPlans.length} plans (page {currentPage})
+          Plans {startIndex} - {endIndex}
         </span>
       </div>
     </div>
