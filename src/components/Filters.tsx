@@ -22,7 +22,7 @@ import {
   type PriceRange,
   type FilterAction,
 } from '@/types/nbn';
-import type { PlansFilters } from '@/lib/nbnService';
+import type { PlansFilters } from '@/lib/filterService';
 
 interface FiltersProps {
   filters: PlansFilters;

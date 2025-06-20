@@ -3,13 +3,8 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Sort } from './Sort';
 import { Filters } from './Filters';
 import { PlansList } from './PlansList';
-import {
-  filterAndSortPlans,
-  paginatePlans,
-  type PlansFilters,
-  type PlansSort,
-} from '@/lib/nbnService';
-import { APP_SETTINGS } from '@/lib/settings';
+import { filterPlans, type PlansFilters } from '@/lib/filterService';
+import { sortPlans, type PlansSort } from '@/lib/sortService';
 import type { NBNPlan, FilterAction } from '@/types/nbn';
 
 interface PlansViewControlProps {
@@ -58,7 +53,8 @@ export function PlansViewControl({ dataFilAddr }: PlansViewControlProps) {
   // (2) state: dataPlans = optimised([ ...dataFilAddr ])
   // deps: sort, filters
   const dataPlans = useMemo(() => {
-    return filterAndSortPlans(dataFilAddr, filters, sort);
+    const filteredPlans = filterPlans(dataFilAddr, filters);
+    return sortPlans(filteredPlans, sort);
   }, [dataFilAddr, filters, sort]);
 
   return (

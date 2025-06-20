@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
-import type { PlansSort } from '@/lib/nbnService';
+import type { PlansSort } from '@/lib/sortService';
 
 interface SortProps {
   sort: PlansSort | undefined;

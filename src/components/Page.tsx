@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Loader2 } from 'lucide-react';
 import { SummaryAddress } from './SummaryAddress';
 import { PlansViewControl } from './PlansViewControl';
-import { fetchAllNBNPlans } from '@/lib/nbnService';
+import { fetchAllPlans } from '@/lib/dataService';
 import type { NBNPlan } from '@/types/nbn';
 
 export function Page() {
@@ -19,7 +19,7 @@ export function Page() {
     const loadData = async () => {
       setLoading(true);
       try {
-        const data = await fetchAllNBNPlans();
+        const data = await fetchAllPlans();
         setDataFetched(data);
         // (5) Updated dateTime = dataFetched dateTime provided || today (as data daily scraped)
         setDataDate(new Date().toISOString());

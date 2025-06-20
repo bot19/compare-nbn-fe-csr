@@ -1,4 +1,5 @@
-import type { PlansFilters, PlansSort } from './nbnService';
+import type { PlansFilters } from './filterService';
+import type { PlansSort } from './sortService';
 
 export interface URLState {
   address?: string;
