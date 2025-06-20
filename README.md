@@ -4,7 +4,6 @@ A React-based web application for comparing NBN (National Broadband Network) pla
 
 ## TODOs
 
-1. fix remove borked URL state
 1. add unit tests
 1. UI nice hero header
 1. UI nice address search + set
@@ -17,6 +16,7 @@ A React-based web application for comparing NBN (National Broadband Network) pla
 
 ## DONE
 
+1. ✅ fix remove borked URL state
 1. ✅ create data types
 1. ✅ mock data, 20-30 plans, consume
 1. ✅ abstract into components
