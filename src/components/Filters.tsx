@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -20,15 +20,19 @@ import {
   type UploadSpeed,
   type NBNType,
   type PriceRange,
+  type FilterAction,
 } from '@/types/nbn';
 import type { PlansFilters } from '@/lib/nbnService';
 
-interface FiltersComponentProps {
+interface FiltersProps {
   filters: PlansFilters;
-  onFiltersChange: (filters: PlansFilters) => void;
+  dispatchFilters: React.Dispatch<FilterAction>;
 }
 
-export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentProps) {
+export function Filters({ filters, dispatchFilters }: FiltersProps) {
+  const [providerSearch, setProviderSearch] = useState('');
+  const [isExpanded, setIsExpanded] = useState(true);
+
   // Create providers list with defaults first, then the rest
   const allProvidersList = [
     ...DEFAULT_PROVIDERS.map((provider) => ({
@@ -47,54 +51,7 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
     ),
   ];
 
-  const [providers, setProviders] = useState(allProvidersList);
-  const [providerSearch, setProviderSearch] = useState('');
-  const [isExpanded, setIsExpanded] = useState(true);
-
-  // Radio button states - sync with props
-  const [selectedPriceRange, setSelectedPriceRange] = useState<PriceRange | ''>(
-    filters.priceRange || ''
-  );
-  const [selectedDownloadSpeed, setSelectedDownloadSpeed] = useState<DownloadSpeed | ''>(
-    filters.downloadSpeed || ''
-  );
-  const [selectedUploadSpeed, setSelectedUploadSpeed] = useState<UploadSpeed | ''>(
-    filters.uploadSpeed || ''
-  );
-  const [selectedNBNType, setSelectedNBNType] = useState<NBNType | ''>(filters.nbnType || '');
-  const [hasPromotion, setHasPromotion] = useState(filters.hasPromotion || false);
-
-  // Update local state when props change
-  useEffect(() => {
-    setSelectedPriceRange(
-      DEFAULT_PRICE_RANGES.includes(filters.priceRange as PriceRange)
-        ? (filters.priceRange as PriceRange)
-        : ''
-    );
-    setSelectedDownloadSpeed(
-      DEFAULT_DOWNLOAD_SPEEDS.includes(filters.downloadSpeed as DownloadSpeed)
-        ? (filters.downloadSpeed as DownloadSpeed)
-        : ''
-    );
-    setSelectedUploadSpeed(
-      DEFAULT_UPLOAD_SPEEDS.includes(filters.uploadSpeed as UploadSpeed)
-        ? (filters.uploadSpeed as UploadSpeed)
-        : ''
-    );
-    setSelectedNBNType(
-      DEFAULT_NBN_TYPES.includes(filters.nbnType as NBNType) ? (filters.nbnType as NBNType) : ''
-    );
-    setHasPromotion(filters.hasPromotion || false);
-
-    setProviders(
-      providers.map((p) => ({
-        ...p,
-        checked: filters.providers?.includes(p.name) || false,
-      }))
-    );
-  }, [filters]);
-
-  const filteredProviders = providers.filter((provider) =>
+  const filteredProviders = allProvidersList.filter((provider) =>
     provider.name.toLowerCase().includes(providerSearch.toLowerCase())
   );
 
@@ -103,31 +60,40 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
   const otherProviders = filteredProviders.filter((provider) => !provider.isDefault);
 
   const handleClearAll = () => {
-    setProviders(providers.map((p) => ({ ...p, checked: false })));
-    setHasPromotion(false);
-    setSelectedPriceRange('');
-    setSelectedDownloadSpeed('');
-    setSelectedUploadSpeed('');
-    setSelectedNBNType('');
-
-    onFiltersChange({});
+    dispatchFilters({ type: 'CLEAR_ALL' });
   };
 
-  const handleApplyFilters = () => {
-    const selectedProviders = providers
-      .filter((provider) => provider.checked)
-      .map((provider) => provider.name);
+  const handleProviderChange = (providerName: string, checked: boolean) => {
+    const currentProviders = filters.providers || [];
+    const newProviders = checked
+      ? [...currentProviders, providerName]
+      : currentProviders.filter((p) => p !== providerName);
 
-    const newFilters: PlansFilters = {
-      providers: selectedProviders.length > 0 ? selectedProviders : undefined,
-      priceRange: selectedPriceRange || undefined,
-      downloadSpeed: selectedDownloadSpeed || undefined,
-      uploadSpeed: selectedUploadSpeed || undefined,
-      nbnType: selectedNBNType || undefined,
-      hasPromotion: hasPromotion || undefined,
-    };
+    dispatchFilters({ type: 'SET_PROVIDERS', payload: newProviders });
+  };
 
-    onFiltersChange(newFilters);
+  const handlePriceRangeChange = (value: string) => {
+    const priceRange = value || undefined;
+    dispatchFilters({ type: 'SET_PRICE_RANGE', payload: priceRange as PriceRange | undefined });
+  };
+
+  const handleDownloadSpeedChange = (value: string) => {
+    const speed = value || undefined;
+    dispatchFilters({ type: 'SET_DOWNLOAD_SPEED', payload: speed as DownloadSpeed | undefined });
+  };
+
+  const handleUploadSpeedChange = (value: string) => {
+    const speed = value || undefined;
+    dispatchFilters({ type: 'SET_UPLOAD_SPEED', payload: speed as UploadSpeed | undefined });
+  };
+
+  const handleNBNTypeChange = (value: string) => {
+    const type = value || undefined;
+    dispatchFilters({ type: 'SET_NBN_TYPE', payload: type as NBNType | undefined });
+  };
+
+  const handlePromotionChange = (checked: boolean) => {
+    dispatchFilters({ type: 'SET_HAS_PROMOTION', payload: checked || undefined });
   };
 
   return (
@@ -147,23 +113,23 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
       {isExpanded && (
         <>
           <CardContent className="space-y-4 py-0 sm:py-0">
-            {/* Has Promotion Toggle - Moved to top */}
+            {/* Has Promotion Toggle */}
             <div className="flex items-center justify-between p-3 bg-white rounded-md border border-gray-200 shadow-sm">
               <span className="text-gray-900">Has promotion</span>
-              <Switch checked={hasPromotion} onCheckedChange={setHasPromotion} />
+              <Switch
+                checked={filters.hasPromotion || false}
+                onCheckedChange={handlePromotionChange}
+              />
             </div>
 
-            {/* Price Range Filter - Changed to radio */}
+            {/* Price Range Filter */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Price range</span>
                 <ChevronDown className="h-4 w-4 text-gray-500" />
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-                <RadioGroup
-                  value={selectedPriceRange}
-                  onValueChange={(value) => setSelectedPriceRange(value as PriceRange)}
-                >
+                <RadioGroup value={filters.priceRange || ''} onValueChange={handlePriceRangeChange}>
                   <div className="space-y-2">
                     {DEFAULT_PRICE_RANGES.map((priceRange) => (
                       <div key={priceRange} className="flex items-center space-x-2">
@@ -182,7 +148,7 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Speed Down Filter - Changed to radio */}
+            {/* Speed Down Filter */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Speed - down</span>
@@ -190,8 +156,8 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
                 <RadioGroup
-                  value={selectedDownloadSpeed}
-                  onValueChange={(value) => setSelectedDownloadSpeed(value as DownloadSpeed)}
+                  value={filters.downloadSpeed || ''}
+                  onValueChange={handleDownloadSpeedChange}
                 >
                   <div className="space-y-2">
                     {DEFAULT_DOWNLOAD_SPEEDS.map((speed) => (
@@ -211,7 +177,7 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Speed Up Filter - Changed to radio */}
+            {/* Speed Up Filter */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Speed - up</span>
@@ -219,8 +185,8 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
                 <RadioGroup
-                  value={selectedUploadSpeed}
-                  onValueChange={(value) => setSelectedUploadSpeed(value as UploadSpeed)}
+                  value={filters.uploadSpeed || ''}
+                  onValueChange={handleUploadSpeedChange}
                 >
                   <div className="space-y-2">
                     {DEFAULT_UPLOAD_SPEEDS.map((speed) => (
@@ -240,17 +206,14 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Fibre Type Filter - Changed to radio */}
+            {/* Fibre Type Filter */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Fibre type</span>
                 <ChevronDown className="h-4 w-4 text-gray-500" />
               </CollapsibleTrigger>
               <CollapsibleContent className="mt-2 p-3 bg-white rounded-md border border-gray-200 shadow-sm">
-                <RadioGroup
-                  value={selectedNBNType}
-                  onValueChange={(value) => setSelectedNBNType(value as NBNType)}
-                >
+                <RadioGroup value={filters.nbnType || ''} onValueChange={handleNBNTypeChange}>
                   <div className="space-y-2">
                     {DEFAULT_NBN_TYPES.map((type) => (
                       <div key={type} className="flex items-center space-x-2">
@@ -269,7 +232,7 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
               </CollapsibleContent>
             </Collapsible>
 
-            {/* Providers Filter - Keep as checkboxes for multiple selection */}
+            {/* Providers Filter */}
             <Collapsible className="w-full">
               <CollapsibleTrigger className="flex items-center justify-between w-full p-3 bg-white rounded-md hover:bg-gray-50 transition-colors border border-gray-200 shadow-sm">
                 <span className="text-gray-900">Providers</span>
@@ -300,13 +263,9 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
                                     id={provider.id}
                                     checked={provider.checked}
                                     className="border-gray-300"
-                                    onCheckedChange={(checked) => {
-                                      setProviders(
-                                        providers.map((p) =>
-                                          p.id === provider.id ? { ...p, checked: !!checked } : p
-                                        )
-                                      );
-                                    }}
+                                    onCheckedChange={(checked) =>
+                                      handleProviderChange(provider.name, !!checked)
+                                    }
                                   />
                                   <Label htmlFor={provider.id} className="text-gray-700">
                                     {provider.name}
@@ -335,13 +294,9 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
                                     id={provider.id}
                                     checked={provider.checked}
                                     className="border-gray-300"
-                                    onCheckedChange={(checked) => {
-                                      setProviders(
-                                        providers.map((p) =>
-                                          p.id === provider.id ? { ...p, checked: !!checked } : p
-                                        )
-                                      );
-                                    }}
+                                    onCheckedChange={(checked) =>
+                                      handleProviderChange(provider.name, !!checked)
+                                    }
                                   />
                                   <Label htmlFor={provider.id} className="text-gray-700">
                                     {provider.name}
@@ -361,23 +316,14 @@ export function FiltersComponent({ filters, onFiltersChange }: FiltersComponentP
             </Collapsible>
           </CardContent>
           <CardFooter>
-            <div className="flex justify-between w-full">
-              <Button
-                variant="outline"
-                size="sm"
-                className="border-gray-300"
-                onClick={handleClearAll}
-              >
-                Clear all
-              </Button>
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
-                onClick={handleApplyFilters}
-              >
-                Apply filters
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-gray-300"
+              onClick={handleClearAll}
+            >
+              Reset
+            </Button>
           </CardFooter>
         </>
       )}

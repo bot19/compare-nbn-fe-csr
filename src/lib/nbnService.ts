@@ -90,7 +90,7 @@ export async function fetchAllNBNPlans(): Promise<NBNPlan[]> {
 export function filterAndSortPlans(
   plans: NBNPlan[],
   filters: PlansFilters = {},
-  sort: PlansSort = { field: 'price', direction: 'asc' }
+  sort?: PlansSort
 ): NBNPlan[] {
   let filteredPlans = [...plans];
 
@@ -139,35 +139,37 @@ export function filterAndSortPlans(
     );
   }
 
-  // Apply sorting
-  filteredPlans.sort((a, b) => {
-    let aValue: number;
-    let bValue: number;
+  // Apply sorting only if sort is defined
+  if (sort) {
+    filteredPlans.sort((a, b) => {
+      let aValue: number;
+      let bValue: number;
 
-    switch (sort.field) {
-      case 'price':
-        aValue = a.price;
-        bValue = b.price;
-        break;
-      case 'downloadSpeed':
-        aValue = parseInt(a.downloadSpeed);
-        bValue = parseInt(b.downloadSpeed);
-        break;
-      case 'uploadSpeed':
-        aValue = parseInt(a.uploadSpeed);
-        bValue = parseInt(b.uploadSpeed);
-        break;
-      default:
-        aValue = a.price;
-        bValue = b.price;
-    }
+      switch (sort.field) {
+        case 'price':
+          aValue = a.price;
+          bValue = b.price;
+          break;
+        case 'downloadSpeed':
+          aValue = parseInt(a.downloadSpeed);
+          bValue = parseInt(b.downloadSpeed);
+          break;
+        case 'uploadSpeed':
+          aValue = parseInt(a.uploadSpeed);
+          bValue = parseInt(b.uploadSpeed);
+          break;
+        default:
+          aValue = a.price;
+          bValue = b.price;
+      }
 
-    if (sort.direction === 'asc') {
-      return aValue - bValue;
-    } else {
-      return bValue - aValue;
-    }
-  });
+      if (sort.direction === 'asc') {
+        return aValue - bValue;
+      } else {
+        return bValue - aValue;
+      }
+    });
+  }
 
   return filteredPlans;
 }

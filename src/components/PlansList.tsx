@@ -1,3 +1,4 @@
+import { useState, useEffect, useMemo } from 'react';
 import { ChevronRight, ChevronLeft, Info, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,23 +7,38 @@ import { APP_SETTINGS } from '@/lib/settings';
 import type { NBNPlan } from '@/types/nbn';
 
 interface PlansListProps {
-  plans: NBNPlan[];
-  currentPage: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-  onPageChange: (page: number) => void;
+  dataPlans: NBNPlan[];
 }
 
-export function PlansList({
-  plans,
-  currentPage,
-  totalPages,
-  hasNextPage,
-  hasPrevPage,
-  onPageChange,
-}: PlansListProps) {
-  if (plans.length === 0) {
+export function PlansList({ dataPlans }: PlansListProps) {
+  // (3) state: currentPage (int)
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // (2) action: read pageLimit from config
+  const pageLimit = APP_SETTINGS.ITEMS_PER_PAGE;
+
+  // Reset to page 1 when dataPlans change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [dataPlans]);
+
+  // (3) state: dataPlansPage - show range of dataPlans based on currentPage
+  const dataPlansPage = useMemo(() => {
+    const startIndex = (currentPage - 1) * pageLimit;
+    const endIndex = startIndex + pageLimit;
+    return dataPlans.slice(startIndex, endIndex);
+  }, [dataPlans, currentPage, pageLimit]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(dataPlans.length / pageLimit);
+  const hasNextPage = currentPage < totalPages;
+  const hasPrevPage = currentPage > 1;
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
+  if (dataPlans.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-gray-500">No plans found matching your criteria.</p>
@@ -32,7 +48,7 @@ export function PlansList({
 
   return (
     <div className="space-y-4">
-      {plans.map((plan) => (
+      {dataPlansPage.map((plan) => (
         <DetailedPlanCard
           key={plan.id}
           provider={plan.provider}
@@ -53,7 +69,7 @@ export function PlansList({
             size="icon"
             className="h-8 w-8"
             disabled={!hasPrevPage}
-            onClick={() => onPageChange(currentPage - 1)}
+            onClick={() => handlePageChange(currentPage - 1)}
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -65,13 +81,13 @@ export function PlansList({
             size="icon"
             className="h-8 w-8"
             disabled={!hasNextPage}
-            onClick={() => onPageChange(currentPage + 1)}
+            onClick={() => handlePageChange(currentPage + 1)}
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
         <span className="text-sm text-gray-500">
-          {plans.length} of {plans.length} plans (page {currentPage})
+          {dataPlansPage.length} of {dataPlans.length} plans (page {currentPage})
         </span>
       </div>
     </div>

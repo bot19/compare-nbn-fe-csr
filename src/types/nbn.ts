@@ -133,4 +133,14 @@ export const ALL_PROVIDERS: Provider[] = [
 export const DEFAULT_DOWNLOAD_SPEEDS: DownloadSpeed[] = ['25', '50', '100', '250', '500', '1000'];
 export const DEFAULT_UPLOAD_SPEEDS: UploadSpeed[] = ['5', '10', '25','50', '100'];
 export const DEFAULT_NBN_TYPES: NBNType[] = ['FTTP', 'FTTN', 'FTTC', 'FTTB', 'HFC', 'Fixed Wireless', 'Satellite'];
-export const DEFAULT_PRICE_RANGES: PriceRange[] = ['Under $50', '$50 - $75', '$75 - $100', '$100 - $125', '$125 - $150', '$150+']; 
+export const DEFAULT_PRICE_RANGES: PriceRange[] = ['Under $50', '$50 - $75', '$75 - $100', '$100 - $125', '$125 - $150', '$150+'];
+
+// Filter action types for useReducer
+export type FilterAction = 
+  | { type: 'SET_PROVIDERS'; payload: string[] }
+  | { type: 'SET_PRICE_RANGE'; payload: PriceRange | undefined }
+  | { type: 'SET_DOWNLOAD_SPEED'; payload: DownloadSpeed | undefined }
+  | { type: 'SET_UPLOAD_SPEED'; payload: UploadSpeed | undefined }
+  | { type: 'SET_NBN_TYPE'; payload: NBNType | undefined }
+  | { type: 'SET_HAS_PROMOTION'; payload: boolean | undefined }
+  | { type: 'CLEAR_ALL' }; 

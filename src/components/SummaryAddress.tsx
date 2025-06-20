@@ -8,34 +8,40 @@ import { lookupAddress, type AddressData } from '@/lib/addressService';
 import type { NBNType } from '@/types/nbn';
 
 interface SummaryAddressProps {
-  address?: string;
-  addrNbnType?: string;
-  onAddressChange: (address: string, nbnType: string) => void;
-  onAddressClear: () => void;
+  setAddrNbnType: (nbnType: string) => void;
+  totalPlans: number;
+  dataDate: string;
 }
 
-export function SummaryAddress({
-  address,
-  addrNbnType,
-  onAddressChange,
-  onAddressClear,
-}: SummaryAddressProps) {
-  const [inputValue, setInputValue] = useState(address || '');
-  const [loading, setLoading] = useState(false);
-  const [addressData, setAddressData] = useState<AddressData | null>(null);
+export function SummaryAddress({ setAddrNbnType, totalPlans, dataDate }: SummaryAddressProps) {
+  // (2) state: addr input
+  const [addrInput, setAddrInput] = useState('');
 
+  // (4) state: NBN API data (this is basically always true in mock flow)
+  const [addressFound, setAddressFound] = useState(false);
+  const [currentAddress, setCurrentAddress] = useState('');
+  const [currentNbnType, setCurrentNbnType] = useState<NBNType | ''>('');
+  const [loading, setLoading] = useState(false);
+
+  // (3) action: NBN API fetch (we mocked)
   const handleSearch = async () => {
-    if (!inputValue.trim()) return;
+    if (!addrInput.trim()) return;
 
     setLoading(true);
     try {
-      const data = await lookupAddress(inputValue.trim());
-      setAddressData(data);
+      // send addr input
+      const data = await lookupAddress(addrInput.trim());
 
-      // Randomly select one NBN type from the available ones
+      // return = addr data + NBN types avail. (for now we just randomly set the nbn type and handle a fake "address found" as per mock flow)
       const selectedNbnType = data.nbnTypes[Math.floor(Math.random() * data.nbnTypes.length)];
 
-      onAddressChange(data.address, selectedNbnType);
+      // (4) state: NBN API data - to set = TICK address = found + set
+      setAddressFound(true);
+      setCurrentAddress(data.address);
+      setCurrentNbnType(selectedNbnType);
+
+      // (5) action: set addrNbnType
+      setAddrNbnType(selectedNbnType);
     } catch (error) {
       console.error('Error looking up address:', error);
     } finally {
@@ -44,9 +50,11 @@ export function SummaryAddress({
   };
 
   const handleClear = () => {
-    setInputValue('');
-    setAddressData(null);
-    onAddressClear();
+    setAddrInput('');
+    setAddressFound(false);
+    setCurrentAddress('');
+    setCurrentNbnType('');
+    setAddrNbnType(''); // Clear the NBN type in parent
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -55,26 +63,36 @@ export function SummaryAddress({
     }
   };
 
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-AU', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
+  };
+
   return (
     <Card className="bg-white border border-gray-200 shadow-sm">
       <CardContent className="">
         <div className="flex flex-col sm:flex-row justify-between md:items-center gap-4">
           <div>
-            <h2 className="text-2xl font-semibold text-gray-900">NBN plans</h2>
-            <p className="text-gray-500">Updated 12 June 2023</p>
+            <h2 className="text-2xl font-semibold text-gray-900">{totalPlans} NBN plans</h2>
+            <p className="text-gray-500">Updated {formatDate(dataDate)}</p>
           </div>
 
           <div className="flex items-center gap-2">
-            {address && addrNbnType ? (
+            {addressFound && currentAddress && currentNbnType ? (
               <div className="flex items-center gap-2">
                 <Badge
                   variant="outline"
                   className="text-xs border-green-300 text-green-700 bg-green-50"
                 >
-                  ✓ {address}
+                  ✓ {currentAddress}
                 </Badge>
                 <Badge variant="outline" className="text-xs border-blue-300 text-blue-700">
-                  {addrNbnType}
+                  {currentNbnType}
                 </Badge>
                 <Button variant="ghost" size="sm" onClick={handleClear} className="h-8 w-8 p-0">
                   <X className="h-4 w-4" />
@@ -84,8 +102,8 @@ export function SummaryAddress({
               <div className="flex items-center">
                 <Input
                   placeholder="Enter your address..."
-                  value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
+                  value={addrInput}
+                  onChange={(e) => setAddrInput(e.target.value)}
                   onKeyPress={handleKeyPress}
                   className="rounded-r-none border-gray-300 bg-white xs:min-w-[240px] md:min-w-[360px]"
                   disabled={loading}
@@ -93,7 +111,7 @@ export function SummaryAddress({
                 <Button
                   className="rounded-l-none bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                   onClick={handleSearch}
-                  disabled={loading || !inputValue.trim()}
+                  disabled={loading || !addrInput.trim()}
                 >
                   {loading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
