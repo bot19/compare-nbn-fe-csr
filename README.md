@@ -9,6 +9,7 @@ A React-based web application for comparing NBN (National Broadband Network) pla
 1. UI nice address search + set
 1. UI nice plan cards
 1. UI nice skeleton loading, lower CLS
+1. basic page title + desc
 1. resolve filters auto expand mobile > desktop
 1. save state to URL: addrNbnType, sort, filters
 
@@ -19,10 +20,10 @@ A React-based web application for comparing NBN (National Broadband Network) pla
 1. ✅ fix: UI address, filters default state based on breakpoint
 1. ✅ UI update footer
 1. ✅ fix remove borked URL state
-1. ✅ create data types
-1. ✅ mock data, 20-30 plans, consume
-1. ✅ abstract into components
 1. ✅ implement state
+1. ✅ abstract into components
+1. ✅ mock data, 20-30 plans, consume
+1. ✅ create data types
 
 ## Features
 
